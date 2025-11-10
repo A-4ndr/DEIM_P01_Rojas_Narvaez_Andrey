@@ -3,6 +3,7 @@ using UnityEngine;
 public class LevelPiece : MonoBehaviour
 {
     public float Velocidad = 5f;        //Creamos vairable de velocidad en float
+    public float Tamaño;                //Creamos una variable de tamaño en float
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,8 +33,8 @@ public class LevelPiece : MonoBehaviour
         }
         else if (collision.CompareTag("Respawn"))   //Y si toca el otro tag
         {
-            //Añade niveles desde el codigo de LevelGenerator
-            LevelGenerator.Añadir();                     
+            //Añade niveles desde el codigo de LevelGenerator (La crea desde la posicion anterior de la ultima pieza)
+            LevelGenerator.Añadir(transform.position - new Vector3(0, Tamaño, 0));                     
 
         }
 

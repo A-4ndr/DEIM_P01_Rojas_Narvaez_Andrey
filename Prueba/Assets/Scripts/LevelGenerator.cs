@@ -24,11 +24,11 @@ public class LevelGenerator : MonoBehaviour
     {
         
     }
-    //variable publica para generar piezas en otro codigo
-    public static void Añadir()
+    //variable publica para generar piezas en otro codigo (El spawnPosition es para que se genere la pieza justo donde termina la otra)
+    public static void Añadir( Vector3 spawnPosition)
     {
         //Crea una pieza otra vez de forma aleatoria en la misma posicion en la que estaba (Quaternion.identity "Sirve para que no altere la rotacion")
-        Instantiate(instance.Piece[Random.Range(0, instance.Piece.Count)], new Vector3(0, -30f, 0), Quaternion.identity);
+        Instantiate(instance.Piece[Random.Range(0, instance.Piece.Count)], spawnPosition, Quaternion.identity);
 
     }
 }

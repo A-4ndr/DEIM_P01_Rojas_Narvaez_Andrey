@@ -1,16 +1,22 @@
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;               //Esto activa el codigo relacionado con UI (Interfaz de usuario)
+
 
 [RequireComponent(typeof(Rigidbody2D))]     //Aseguramos que si o si se necesita el Rigidbody2D
 public class Prota : MonoBehaviour
 {
     float Velocidad = 4.0f; //Se mueve
     Rigidbody2D rb; //Rigidbody al prota
+    public static int Puntos;                  //Variable que se encarga de contabilizar los puntos
+    public TMP_Text MarcadorPuntos;            //Objeto de texto que tiene el marcador de los puntos, el "Public" se usa cuando tengo asignar algo dentro del unity
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
+        Puntos = 0;                       //Empiezas con cero puntos
         rb = GetComponent<Rigidbody2D>(); //Asignamos rigidbody
 
     }
@@ -46,6 +52,23 @@ public class Prota : MonoBehaviour
         {
             //Destruye al personaje al tocar el objeto
             Destroy(gameObject);
+
+        }
+
+    }
+    //Colisiones trigger en 2D
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+
+        //Detecta que el personaje colisiona con un objeto con el tag ( se puede usar el .tag normal de toda la vida)
+        if (collider.gameObject.CompareTag("Moneda"))
+        {
+            //Destruye al personaje al tocar el objeto
+            Destroy(collider.gameObject);
+            //Suma puntos en el interfaz
+            Puntos  ++;
+            //Cambiar el texto de "MarcadorMonedas" a ": junto con el valor de la variable Puntos", esto se crea con el codigo (MarcadorMonedas.text = ": "+ Puntos;)
+            MarcadorPuntos.text = ": " + Puntos;
 
         }
 

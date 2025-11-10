@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Suelo
   - DestruccionPieza
+  - Moneda
   layers:
   - Default
   - TransparentFX
