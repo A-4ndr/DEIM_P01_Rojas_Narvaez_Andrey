@@ -1,16 +1,19 @@
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;               //Esto activa el codigo relacionado con UI (Interfaz de usuario)
 
 
 [RequireComponent(typeof(Rigidbody2D))]     //Aseguramos que si o si se necesita el Rigidbody2D
 public class Prota : MonoBehaviour
 {
+    [SerializeField]                           //Sirve para poder ver algo que esta privado en el inspector
     float Velocidad = 4.0f; //Se mueve
     Rigidbody2D rb; //Rigidbody al prota
     public static int Puntos;                  //Variable que se encarga de contabilizar los puntos
     public TMP_Text MarcadorPuntos;            //Objeto de texto que tiene el marcador de los puntos, el "Public" se usa cuando tengo asignar algo dentro del unity
+    private int bestScore;                     //Se encarga de tener la maxima puntuacion historica
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,6 +27,13 @@ public class Prota : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            //Llamamos a la funcion de maxima puntuacion
+            CheckBestScore();
+
+        }
+
         //Detecta que toco la tecla A para ir a la izquierda
         if (Input.GetKey(KeyCode.A))
         {
@@ -69,6 +79,22 @@ public class Prota : MonoBehaviour
             Puntos  ++;
             //Cambiar el texto de "MarcadorMonedas" a ": junto con el valor de la variable Puntos", esto se crea con el codigo (MarcadorMonedas.text = ": "+ Puntos;)
             MarcadorPuntos.text = ": " + Puntos;
+
+        }
+
+    }
+    //Void para mejor puntuacion 
+    private void CheckBestScore()
+    {
+
+        //Sirve para guardar la mejor puntuacion en una tabla local para manetenerla
+        if (Puntos >= PlayerPrefs.GetInt("bestScore"))
+        {
+            //Guarda la maxima puntuacion en el computador
+            PlayerPrefs.SetInt("bestScore", Puntos);
+            //Aumenta la puntuacion maxima
+            //bestScore = Puntos;
+            PlayerPrefs.DeleteKey("bestScore");
 
         }
 
