@@ -27,6 +27,31 @@ public class Prota : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Detecta que estoy tocando la pantalla
+        if (Input.touchCount > 0)
+        {
+            //En que posicion de la X estamos tocando
+            float touchScreamPositionX = Input.touches[0].position.x;
+            //Cual es el centro de la pantalla
+            float screamCenter = Screen.width / 2;
+            //Detecta que el lugar donde estoy tocando es menor al centro para mover el personaje
+            if (touchScreamPositionX < screamCenter)
+            {
+
+                //Mueve el personaje a la izquierda
+                transform.Translate(-Velocidad * Time.deltaTime, 0, 0);
+
+            }
+            //Detecta que el lugar donde estoy tocando es mayor al centro para mover el personaje
+            if (touchScreamPositionX > screamCenter)
+            {
+
+                //Mueve el personaje a la derecha
+                transform.Translate(Velocidad * Time.deltaTime, 0, 0);
+
+            }
+        }
+
         if (Input.GetKey(KeyCode.Tab))
         {
             //Llamamos a la funcion de maxima puntuacion
