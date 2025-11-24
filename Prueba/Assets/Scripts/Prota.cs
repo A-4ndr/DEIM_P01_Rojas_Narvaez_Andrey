@@ -14,6 +14,9 @@ public class Prota : MonoBehaviour
     public static int Puntos;                  //Variable que se encarga de contabilizar los puntos
     public TMP_Text MarcadorPuntos;            //Objeto de texto que tiene el marcador de los puntos, el "Public" se usa cuando tengo asignar algo dentro del unity
     private int bestScore;                     //Se encarga de tener la maxima puntuacion historica
+    public GameObject DerrapeDER;              //Derrape derecho
+    public GameObject DerrapeIZQ;              //Derrape Izquierdo
+                      
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,30 +30,10 @@ public class Prota : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Detecta que estoy tocando la pantalla
-        if (Input.touchCount > 0)
-        {
-            //En que posicion de la X estamos tocando
-            float touchScreamPositionX = Input.touches[0].position.x;
-            //Cual es el centro de la pantalla
-            float screamCenter = Screen.width / 2;
-            //Detecta que el lugar donde estoy tocando es menor al centro para mover el personaje
-            if (touchScreamPositionX < screamCenter)
-            {
-
-                //Mueve el personaje a la izquierda
-                transform.Translate(-Velocidad * Time.deltaTime, 0, 0);
-
-            }
-            //Detecta que el lugar donde estoy tocando es mayor al centro para mover el personaje
-            if (touchScreamPositionX > screamCenter)
-            {
-
-                //Mueve el personaje a la derecha
-                transform.Translate(Velocidad * Time.deltaTime, 0, 0);
-
-            }
-        }
+        //Llamamos a la funcion del movimiento
+        Movimiento();
+        //Llamaos a la funcion del movimiento con el dedo
+        //MovimientoDedo();
 
         if (Input.GetKey(KeyCode.Tab))
         {
@@ -106,6 +89,66 @@ public class Prota : MonoBehaviour
             MarcadorPuntos.text = ": " + Puntos;
 
         }
+
+    }
+    //Funcion para el movimiento con el dedo
+    private void MovimientoDedo()
+    {
+
+        //Detecta que estoy tocando la pantalla con el dedo
+        if (Input.touchCount > 0)
+        {
+            //Detecta que estoy moviendo el dedo
+            float fingerMovementX = Input.touches[0].deltaPosition.x;
+            //Movimiento (Transform)
+            transform.Translate(fingerMovementX * Velocidad * Time.deltaTime, 0, 0);
+            
+        }
+        else
+        {
+            //Detener movimiento (RigidBody)
+            rb.linearVelocityX = 0;
+
+        }
+
+    }
+    //Funcion para el movimiento del personaje al tocar la pantalla
+    private void Movimiento()
+    {
+
+        //Detecta que estoy tocando la pantalla con el dedo
+        if (Input.touchCount > 0)
+        {
+            //En que posicion de la X estamos tocando
+            float touchScreamPositionX = Input.touches[0].position.x;
+            //Cual es el centro de la pantalla
+            float screamCenter = Screen.width / 2;
+
+            //Detecta que el lugar donde estoy tocando con el dedo es menor al centro para mover el personaje
+            if (touchScreamPositionX < screamCenter)
+            {
+
+                //Mueve el personaje a la izquierda
+                transform.Translate(-Velocidad * Time.deltaTime, 0, 0);
+                //Activa las particulas del derrape derecho al moverse a la izquierda
+                DerrapeIZQ.SetActive(false);
+                DerrapeDER.SetActive(true);
+
+            }
+            //Detecta que el lugar donde estoy tocando con el dedo es mayor al centro para mover el personaje0
+            if (touchScreamPositionX > screamCenter)
+            {
+
+                //Mueve el personaje a la derecha
+                transform.Translate(Velocidad * Time.deltaTime, 0, 0);
+                //Activa las partiuclas del derrape izquierdo al moverse a la derecha
+                DerrapeIZQ.SetActive(true);
+                DerrapeDER.SetActive(false);
+
+            }
+
+        }
+        
 
     }
     //Void para mejor puntuacion 
