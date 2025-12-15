@@ -9,14 +9,19 @@ using UnityEngine.UI;               //Esto activa el codigo relacionado con UI (
 public class Prota : MonoBehaviour
 {
     [SerializeField]                           //Sirve para poder ver algo que esta privado en el inspector
-    float Velocidad = 4.0f; //Se mueve
-    Rigidbody2D rb; //Rigidbody al prota
+    float Velocidad = 4.0f;                    //Se mueve
+    [SerializeField]
+    float TiempoSalto = 1.0f;                  //Tiempo de salto creo
+    [SerializeField]
+    float InicioSalto = 1.0f;                  //Inicia el salto
+    Rigidbody2D rb;                            //Rigidbody al prota
     public static int Puntos;                  //Variable que se encarga de contabilizar los puntos
     public TMP_Text MarcadorPuntos;            //Objeto de texto que tiene el marcador de los puntos, el "Public" se usa cuando tengo asignar algo dentro del unity
     private int bestScore;                     //Se encarga de tener la maxima puntuacion historica
     public GameObject DerrapeDER;              //Derrape derecho
     public GameObject DerrapeIZQ;              //Derrape Izquierdo
-                      
+    public GameObject Estela;                  //Estela                  
+    public GameObject Sombra;                  //Sombra
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -77,6 +82,24 @@ public class Prota : MonoBehaviour
     //Colisiones trigger en 2D
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        //Detecta que toco un objeto con el tag rampa
+        if(collider.gameObject.CompareTag("Rampa"))
+        {
+            //Cambia la velocidad a 0
+            Velocidad = 0;
+            //Aumenta la escala del personaje
+            transform.localScale = new Vector2(1.2f, 1.2f);
+            //Detiene el personaje
+            transform.Translate(Velocidad * Time.deltaTime, 0, 0);
+            //Desactiva todas las particulas
+            DerrapeIZQ.SetActive(false);
+            DerrapeDER.SetActive(false);
+            Estela.SetActive(false);
+            Sombra.SetActive(true);
+            //Llama al salto final
+            Invoke("FinSalto", TiempoSalto);
+
+        }
 
         //Detecta que el personaje colisiona con un objeto con el tag ( se puede usar el .tag normal de toda la vida)
         if (collider.gameObject.CompareTag("Moneda"))
@@ -84,7 +107,7 @@ public class Prota : MonoBehaviour
             //Destruye al personaje al tocar el objeto
             Destroy(collider.gameObject);
             //Suma puntos en el interfaz
-            Puntos  ++;
+            Puntos++;
             //Cambiar el texto de "MarcadorMonedas" a ": junto con el valor de la variable Puntos", esto se crea con el codigo (MarcadorMonedas.text = ": "+ Puntos;)
             MarcadorPuntos.text = ": " + Puntos;
 
@@ -133,6 +156,7 @@ public class Prota : MonoBehaviour
                 //Activa las particulas del derrape derecho al moverse a la izquierda
                 DerrapeIZQ.SetActive(false);
                 DerrapeDER.SetActive(true);
+                Estela.SetActive(true);
 
             }
             //Detecta que el lugar donde estoy tocando con el dedo es mayor al centro para mover el personaje0
@@ -144,11 +168,28 @@ public class Prota : MonoBehaviour
                 //Activa las partiuclas del derrape izquierdo al moverse a la derecha
                 DerrapeIZQ.SetActive(true);
                 DerrapeDER.SetActive(false);
+                Estela.SetActive(true);
 
             }
 
         }
         
+
+    }
+    
+
+    //Void para terminar el salto
+    private void FinSalto()
+    {
+        //Aumenta la escala del personaje
+        transform.localScale = new Vector2(1, 1);
+        //Desactiva todas las particulas
+        DerrapeIZQ.SetActive(true);
+        DerrapeDER.SetActive(true);
+        Estela.SetActive(true);
+        Sombra.SetActive(false);
+        //Vuelve a la velocidad normal
+        Velocidad = 4F;
 
     }
     //Void para mejor puntuacion 

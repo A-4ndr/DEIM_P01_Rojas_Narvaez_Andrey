@@ -7,6 +7,8 @@ TagManager:
   - Suelo
   - DestruccionPieza
   - Moneda
+  - Rampa
+  - Piso
   layers:
   - Default
   - TransparentFX
